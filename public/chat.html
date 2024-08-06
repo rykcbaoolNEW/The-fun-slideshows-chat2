@@ -46,13 +46,17 @@
         <input type="text" id="message" placeholder="Type your message here...">
         <button onclick="sendMessage()">Send</button>
     </div>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
+        const socket = io();
+
         const username = localStorage.getItem('username');
         if (!username) {
             window.location.href = 'index.html';
         }
 
         const chatBox = document.getElementById('chat-box');
+        const messageInput = document.getElementById('message');
 
         function addMessage(username, message) {
             const messageElement = document.createElement('div');
@@ -63,16 +67,19 @@
         }
 
         function sendMessage() {
-            const messageInput = document.getElementById('message');
             const message = messageInput.value;
             if (message) {
-                addMessage(username, message);
+                const data = { username, message };
+                addMessage(data.username, data.message);
+                socket.emit('message', data);
                 messageInput.value = '';
-                // TODO: Send message to the server
             }
         }
 
-        // TODO: Listen for messages from the server
+        socket.on('message', (data) => {
+            addMessage(data.username, data.message);
+        });
     </script>
 </body>
 </html>
+
