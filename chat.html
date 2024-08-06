@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        #chat-box {
+            flex: 1;
+            padding: 10px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+        }
+        #message-form {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+        #message {
+            flex: 1;
+            padding: 10px;
+            font-size: 1em;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .message {
+            margin: 10px 0;
+        }
+        .username {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-box"></div>
+    <div id="message-form">
+        <input type="text" id="message" placeholder="Type your message here...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <script>
+        const username = localStorage.getItem('username');
+        if (!username) {
+            window.location.href = 'index.html';
+        }
+
+        const chatBox = document.getElementById('chat-box');
+
+        function addMessage(username, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.innerHTML = `<span class="username">${username}: </span>${message}`;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('message');
+            const message = messageInput.value;
+            if (message) {
+                addMessage(username, message);
+                messageInput.value = '';
+                // TODO: Send message to the server
+            }
+        }
+
+        // TODO: Listen for messages from the server
+    </script>
+</body>
+</html>
